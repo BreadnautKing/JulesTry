@@ -7,10 +7,14 @@ import com.example.beyourcoach.data.local.dao.ExerciseDao
 import com.example.beyourcoach.data.local.dao.ProductDao
 import com.example.beyourcoach.data.local.dao.UserDao
 import com.example.beyourcoach.data.local.dao.WorkoutLogDao
+import com.example.beyourcoach.data.repository.ExerciseRepositoryImpl
 import com.example.beyourcoach.data.repository.ProductRepositoryImpl
 import com.example.beyourcoach.data.repository.UserRepositoryImpl
+import com.example.beyourcoach.data.repository.WorkoutLogRepositoryImpl
+import com.example.beyourcoach.domain.repository.ExerciseRepository
 import com.example.beyourcoach.domain.repository.ProductRepository
 import com.example.beyourcoach.domain.repository.UserRepository
+import com.example.beyourcoach.domain.repository.WorkoutLogRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,5 +61,17 @@ object AppModule {
     @Singleton
     fun provideProductRepository(dao: ProductDao): ProductRepository {
         return ProductRepositoryImpl(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideExerciseRepository(dao: ExerciseDao): ExerciseRepository {
+        return ExerciseRepositoryImpl(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWorkoutLogRepository(dao: WorkoutLogDao): WorkoutLogRepository {
+        return WorkoutLogRepositoryImpl(dao)
     }
 }
