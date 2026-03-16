@@ -2,6 +2,8 @@ package com.example.beyourcoach.presentation.ui.components
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.example.beyourcoach.R
 import com.example.beyourcoach.domain.model.UserMode
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -11,14 +13,14 @@ fun MainTopBar(
     onToggleMode: () -> Unit
 ) {
     TopAppBar(
-        title = { Text(text = "Be Your Coach") },
+        title = { Text(text = stringResource(id = R.string.app_name)) },
         actions = {
-            Text(text = "LITE")
+            Text(text = stringResource(id = R.string.lite))
             Switch(
                 checked = currentMode == UserMode.PRO,
                 onCheckedChange = { onToggleMode() }
             )
-            Text(text = "PRO")
+            Text(text = stringResource(id = R.string.pro))
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,

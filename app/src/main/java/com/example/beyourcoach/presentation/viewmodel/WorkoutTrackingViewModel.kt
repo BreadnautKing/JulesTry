@@ -27,10 +27,20 @@ class WorkoutTrackingViewModel @Inject constructor(
     private val _restTimeRemaining = MutableStateFlow(0)
     val restTimeRemaining: StateFlow<Int> = _restTimeRemaining.asStateFlow()
 
+    // ExerciseID -> InputState
+    private val _workoutInputs = MutableStateFlow<Map<Long, WorkoutInputState>>(emptyMap())
+    val workoutInputs: StateFlow<Map<Long, WorkoutInputState>> = _workoutInputs.asStateFlow()
+
     private var timerJob: Job? = null
 
     init {
         loadExercises()
+    }
+
+    fun onInputChange(exerciseId: Long, weight: String, reps: String, rpe: String) {
+        val currentInputs = _workoutInputs.value.toMutableMap()
+        currentInputs[exerciseId] = WorkoutInputState(weight, reps, rpe)
+        _workoutInputs.value = currentInputs
     }
 
     private fun loadExercises() {
@@ -59,3 +69,9 @@ class WorkoutTrackingViewModel @Inject constructor(
         }
     }
 }
+
+data class WorkoutInputState(
+    val weight: String = "",
+    val reps: String = "",
+    val rpe: String = ""
+)

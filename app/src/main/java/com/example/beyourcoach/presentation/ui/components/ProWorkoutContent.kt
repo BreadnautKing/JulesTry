@@ -9,14 +9,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.beyourcoach.domain.model.Exercise
 import com.example.beyourcoach.domain.model.WorkoutLog
+import com.example.beyourcoach.presentation.viewmodel.WorkoutInputState
 
 @Composable
 fun ProWorkoutContent(
     exercises: List<Exercise>,
+    inputs: Map<Long, WorkoutInputState>,
+    onInputChange: (Long, String, String, String) -> Unit,
     onSaveSet: (WorkoutLog) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         items(exercises) { exercise ->
+            val inputState = inputs[exercise.id] ?: WorkoutInputState()
+
             Card(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -25,7 +30,6 @@ fun ProWorkoutContent(
                     Text(text = exercise.name, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Table Header
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text("Set", modifier = Modifier.weight(1f))
                         Text("kg", modifier = Modifier.weight(2f))
@@ -34,25 +38,32 @@ fun ProWorkoutContent(
                         Spacer(modifier = Modifier.weight(1f))
                     }
 
-                    // Simple input row for new set
-                    var weight by remember { mutableStateOf("") }
-                    var reps by remember { mutableStateOf("") }
-                    var rpe by remember { mutableStateOf("") }
-
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text("1", modifier = Modifier.weight(1f))
-                        TextField(value = weight, onValueChange = { weight = it }, modifier = Modifier.weight(2f))
-                        TextField(value = reps, onValueChange = { reps = it }, modifier = Modifier.weight(2f))
-                        TextField(value = rpe, onValueChange = { rpe = it }, modifier = Modifier.weight(2f))
+                        TextField(
+                            value = inputState.weight,
+                            onValueChange = { onInputChange(exercise.id ?: 0, it, inputState.reps, inputState.rpe) },
+                            modifier = Modifier.weight(2f)
+                        )
+                        TextField(
+                            value = inputState.reps,
+                            onValueChange = { onInputChange(exercise.id ?: 0, inputState.weight, it, inputState.rpe) },
+                            modifier = Modifier.weight(2f)
+                        )
+                        TextField(
+                            value = inputState.rpe,
+                            onValueChange = { onInputChange(exercise.id ?: 0, inputState.weight, inputState.reps, it) },
+                            modifier = Modifier.weight(2f)
+                        )
                         IconButton(
                             onClick = {
                                 onSaveSet(WorkoutLog(
                                     id = null,
                                     exerciseId = exercise.id ?: 0,
                                     sets = 1,
-                                    reps = reps.toIntOrNull() ?: 0,
-                                    weight = weight.toDoubleOrNull() ?: 0.0,
-                                    rpe = rpe.toIntOrNull() ?: 0
+                                    reps = inputState.reps.toIntOrNull() ?: 0,
+                                    weight = inputState.weight.toDoubleOrNull() ?: 0.0,
+                                    rpe = inputState.rpe.toIntOrNull() ?: 0
                                 ))
                             },
                             modifier = Modifier.weight(1f)
