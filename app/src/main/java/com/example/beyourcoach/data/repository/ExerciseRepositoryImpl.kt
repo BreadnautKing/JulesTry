@@ -30,7 +30,8 @@ fun ExerciseEntity.toDomain(): Exercise {
         id = id,
         name = name,
         muscleGroup = muscleGroup,
-        videoUrl = videoUrl
+        videoUrl = videoUrl,
+        isPro = isPro
     )
 }
 
@@ -39,6 +40,7 @@ fun Exercise.toEntity(): ExerciseEntity {
         id = id ?: 0,
         name = name,
         muscleGroup = muscleGroup,
-        videoUrl = videoUrl
+        videoUrl = videoUrl,
+        isPro = isPro
     )
 }
