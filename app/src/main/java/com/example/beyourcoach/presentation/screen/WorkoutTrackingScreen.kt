@@ -1,12 +1,16 @@
 package com.example.beyourcoach.presentation.screen
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import com.example.beyourcoach.domain.model.UserMode
 import com.example.beyourcoach.presentation.ui.components.LiteWorkoutContent
 import com.example.beyourcoach.presentation.ui.components.ProWorkoutContent
+import com.example.beyourcoach.presentation.ui.components.RestTimerComponent
 import com.example.beyourcoach.presentation.viewmodel.ThemeViewModel
 import com.example.beyourcoach.presentation.viewmodel.WorkoutTrackingViewModel
 
@@ -18,9 +22,12 @@ fun WorkoutTrackingScreen(
     val mode by themeViewModel.mode.collectAsState()
     val exercises by workoutViewModel.exercises.collectAsState()
     val inputs by workoutViewModel.workoutInputs.collectAsState()
+    val restTime by workoutViewModel.restTimeRemaining.collectAsState()
 
-    Box {
-        when (mode) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        RestTimerComponent(timeRemaining = restTime)
+        Box(modifier = Modifier.weight(1f)) {
+            when (mode) {
             UserMode.LITE -> LiteWorkoutContent(exercises = exercises)
             UserMode.PRO -> ProWorkoutContent(
                 exercises = exercises,

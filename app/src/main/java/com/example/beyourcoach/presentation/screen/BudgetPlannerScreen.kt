@@ -13,6 +13,7 @@ import com.example.beyourcoach.presentation.viewmodel.BudgetViewModel
 @Composable
 fun BudgetPlannerScreen(viewModel: BudgetViewModel) {
     var budgetInput by remember { mutableStateOf("5000") }
+    var calorieInput by remember { mutableStateOf("2000") }
     val shoppingList by viewModel.shoppingList.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -22,9 +23,21 @@ fun BudgetPlannerScreen(viewModel: BudgetViewModel) {
             label = { Text("Weekly Budget") },
             modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = calorieInput,
+            onValueChange = { calorieInput = it },
+            label = { Text("Daily Calories") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Button(
-            onClick = { viewModel.calculateList(budgetInput.toDoubleOrNull() ?: 0.0, 2000.0) },
+            onClick = {
+                viewModel.calculateList(
+                    budgetInput.toDoubleOrNull() ?: 0.0,
+                    calorieInput.toDoubleOrNull() ?: 2000.0
+                )
+            },
             modifier = Modifier.padding(vertical = 16.dp)
         ) {
             Text("Calculate Shopping List")
